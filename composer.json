@@ -1,8 +1,10 @@
 {
   "name": "Vinlock/stream-api",
-  "description": "PHP API Wrapper for Streams",
+  "description": "PHP API Wrapper for Stream Services such as Twitch.tv and Hitbox.tv",
+  "homepage": "https://github.com/Vinlock/stream-api",
   "minimum-stability": "stable",
-  "license": "proprietary",
+  "license": "MIT",
+  "keywords": ["twitch.tv", "hitbox.tv", "stream"],
   "authors": [
     {
       "name": "Dak Washbrook",
@@ -10,7 +12,8 @@
     }
   ],
   "require": {
-    "rmccue/requests": "v1.6.1"
+    "rmccue/requests": "v1.6.1",
+    "php": ">=7.0"
   },
   "autoload": {
     "psr-4": {
