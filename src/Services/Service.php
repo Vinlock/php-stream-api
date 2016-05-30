@@ -43,8 +43,8 @@ class Service {
         return $streams;
     }
 
-    public function getJSON() {
-        return json_encode($this->getArray());
+    public function getJSON($pretty=FALSE) {
+        return json_encode($this->getArray(), ($pretty) ? JSON_PRETTY_PRINT : NULL);
     }
 
     public function getObject() {
