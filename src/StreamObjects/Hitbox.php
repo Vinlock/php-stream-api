@@ -132,4 +132,21 @@ class Hitbox extends Stream implements StreamInterface {
         return self::STREAM_IMG.stripcslashes($this->stream['channel']['user_logo']);
     }
 
+    public function bio() {
+        return "";
+    }
+
+    public function created_at() {
+        return $this->stream['media_date_added'];
+    }
+
+    public function updated_at() {
+        return $this->stream['media_live_since'];
+    }
+
+    public function followers() {
+        return $this->stream['channel']['followers'];
+    }
+
+
 }

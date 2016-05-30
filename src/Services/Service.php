@@ -51,12 +51,6 @@ class Service {
         return (object) $this->getArray();
     }
 
-    public static function sortViewers(&$streams) {
-        usort($streams, function($a, $b) {
-            return $b->viewers - $a->viewers;
-        });
-    }
-
     public function sort() {
         usort($this->streams, function($a, $b) {
             return $b->viewers - $a->viewers;

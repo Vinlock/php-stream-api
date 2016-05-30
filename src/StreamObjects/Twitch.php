@@ -118,7 +118,7 @@ class Twitch extends Stream implements StreamInterface {
      * @return string
      */
     public function id() {
-        return $this->stream['_id'];
+        return $this->stream['channel']['_id'];
     }
 
     /**
@@ -129,6 +129,23 @@ class Twitch extends Stream implements StreamInterface {
     public function avatar() {
         $avatar = $this->stream['channel']['logo'];
         return (is_null($avatar)) ? self::DEFAULT_AVATAR : $avatar;
+    }
+
+    public function bio() {
+        $json = json_decode(\Requests::get(self::USERS_API.$this->username())->body);
+        return self::FilterBio($json['bio']);
+    }
+
+    public function created_at() {
+        return new \DateTime($this->stream['created_at']);
+    }
+
+    public function updated_at() {
+        return new \DateTime($this->stream['updated_at']);
+    }
+
+    public function followers() {
+        return $this->stream['channel']['followers'];
     }
 
 

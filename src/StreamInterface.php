@@ -88,4 +88,17 @@ interface StreamInterface {
      */
     function avatar();
 
+    /**
+     * Stream Bio
+     *
+     * @return mixed
+     */
+    function bio();
+
+    function created_at();
+
+    function updated_at();
+
+    function followers();
+
 }

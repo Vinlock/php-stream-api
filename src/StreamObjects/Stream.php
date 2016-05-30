@@ -26,6 +26,8 @@ abstract class Stream {
 
     protected $service;
 
+    protected $time_format = "m-d-Y H:i:s";
+
     /**
      * Append Stream Service to ID
      *
@@ -44,8 +46,8 @@ abstract class Stream {
 
     protected $customMembers = [];
 
-    protected function stream() {
-        return [
+    protected function stream($date_format = TRUE) {
+        $result = [
             "username" => $this->username(),
             "display_name" => $this->display_name(),
             "game" => $this->game(),
@@ -55,12 +57,24 @@ abstract class Stream {
                 "large" => $this->largePreview()
             ],
             "status" => $this->status(),
+            "bio" =>$this->bio(),
             "url" => $this->url(),
             "viewers" => $this->viewers(),
             "id" => $this->id(),
             "avatar" => $this->avatar(),
-            "service" => $this->service
+            "service" => $this->service,
+            "followers" => $this->followers()
         ];
+        if ($date_format === TRUE) {
+            $result['created_at'] = $this->created_at()->format($this->time_format);
+            $result['updated_at'] = $this->updated_at()->format($this->time_format);
+        } elseif ($date_format) {
+            $result['created_at'] = $this->created_at()->format($date_format);
+            $result['updated_at'] = $this->updated_at()->format($date_format);
+        } else {
+            $result['created_at'] = $this->created_at();
+            $result['updated_at'] = $this->updated_at();
+        }
     }
 
     /**
@@ -149,6 +163,13 @@ abstract class Stream {
         }
     }
 
+    public static function FilterBio($bio) {
+        // Filter the Bio of all bad characters.
+        $bio = preg_replace("/\r|\n/", "", html_entity_decode(
+            htmlspecialchars($bio), ENT_QUOTES));
+        return $bio;
+    }
+
     /**
      * Stream Username
      *
@@ -226,6 +247,33 @@ abstract class Stream {
      */
     abstract public function avatar();
 
+    /**
+     * Stream Bio
+     *
+     * @return mixed
+     */
+    abstract public function bio();
+
+    /**
+     * When the Stream User made account.
+     *
+     * @return \DateTime
+     */
+    abstract public function created_at();
+
+    /**
+     * When stream was last updated.
+     *
+     * @return \DateTime
+     */
+    abstract public function updated_at();
+
+    /**
+     * Number of stream followers
+     *
+     * @return integer
+     */
+    abstract public function followers();
 
 
 }
