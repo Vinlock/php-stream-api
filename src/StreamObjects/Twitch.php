@@ -2,29 +2,30 @@
 /**
  * Website: vinlock-twitch-api
  * Created By: Vinlock
- * Date: 5/29/16 7:16 PM
+ * Date: 5/29/16 5:29 PM
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Vinlock\StreamAPI\Hitbox;
+namespace Vinlock\StreamAPI\StreamObjects;
 
 
-use Vinlock\StreamAPI\Stream;
 use Vinlock\StreamAPI\StreamInterface;
 
-class StreamObject extends Stream implements StreamInterface {
+class Twitch extends Stream implements StreamInterface {
 
-    protected $service = 'hitbox';
+    public $service = 'twitch';
 
-    const STREAM_KEY = "livestream";
+    const STREAM_KEY = "streams";
 
-    const STREAM_API = "https://www.hitbox.tv/api/media/live/";
+    const STREAM_API = "https://api.twitch.tv/kraken/streams?channel=";
 
-    const GAMES_API = "https://api.hitbox.tv/media/live/list?game=";
+    const GAMES_API = "https://api.twitch.tv/kraken/streams?game=";
 
-    const STREAM_IMG = "http://edge.sf.hitbox.tv";
+    const USERS_API = "https://api.twitch.tv/kraken/users/";
 
-    const STREAM_URL = "http://www.hitbox.tv/";
+    const STREAM_URL = "http://www.twitch.tv/";
+
+    const DEFAULT_AVATAR = "http://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png";
 
     public function __construct($array) {
         $this->stream = $array;
@@ -44,7 +45,7 @@ class StreamObject extends Stream implements StreamInterface {
      *
      * @return string
      */
-    public function displayName() {
+    public function display_name() {
         return $this->stream['channel']['display_name'];
     }
 
@@ -126,7 +127,9 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function avatar() {
-        return $this->stream['channel']['logo'];
+        $avatar = $this->stream['channel']['logo'];
+        return (is_null($avatar)) ? self::DEFAULT_AVATAR : $avatar;
     }
+
 
 }

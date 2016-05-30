@@ -11,15 +11,16 @@ namespace Vinlock\StreamAPI\Services;
 
 
 use Vinlock\StreamAPI\StreamDriver;
+use Vinlock\StreamAPI\StreamObjects\Stream;
 
 class Twitch extends Service {
 
     function __construct($usernames) {
-        if (is_array($usernames)) {
-            $this->stream = StreamDriver::MultiStream($usernames, 'twitch');
-        } else {
-            $this->stream = StreamDriver::SingleStream($usernames, 'twitch');
+        if (!is_array($usernames) && is_string($usernames)) {
+            $array = [$usernames];
         }
+
+        $this->streams = StreamDriver::getStream($usernames, 'twitch');
     }
 
 }

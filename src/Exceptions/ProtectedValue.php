@@ -20,7 +20,7 @@ class ProtectedValue extends APIError {
     public function __construct($var) {
         $this->var = $var;
 
-        $message = $this->message . " " . "$".$var." cannot be set.";
+        $message = $this->message . " $".$var." cannot be set.";
 
         parent::__construct($this->message, $this->code, NULL);
     }

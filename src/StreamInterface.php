@@ -23,7 +23,7 @@ interface StreamInterface {
      *
      * @return string
      */
-    function displayName();
+    function display_name();
 
     /**
      * Stream Game

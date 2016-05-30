@@ -8,8 +8,13 @@
 
 require_once ("../vendor/autoload.php");
 
-$stream = new \Vinlock\StreamAPI\Services\Twitch("trick2g");
+$twitch = new \Vinlock\StreamAPI\Services\Twitch(['trick2g', 'mufflermankr', 'sirhcez', 'opsct', 'gamesager', 'praetor19', 'nl_Kripp']);
+$twitch->where("trick2g")->hi = "hello";
 
-$stream->hello = "hi";
+$hitbox = new \Vinlock\StreamAPI\Services\Hitbox(['tophatsandchampagne']);
 
-echo $stream->getJSON();
+$merge = \Vinlock\StreamAPI\Services\Service::merge($twitch, $hitbox);
+
+header('Content-Type: application/json');
+
+echo $merge->getJSON();

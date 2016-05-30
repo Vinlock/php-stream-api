@@ -6,7 +6,7 @@
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-namespace Vinlock\StreamAPI;
+namespace Vinlock\StreamAPI\StreamObjects;
 
 
 use Vinlock\StreamAPI\Exceptions\ProtectedValue;
@@ -39,23 +39,15 @@ abstract class Stream {
      * @var array
      */
     private $guarded = [
-        "username", "displayName", "preview", "status", "url", "viewers", "id", "avatar"
+        "username", "display_name", "preview", "status", "url", "viewers", "id", "avatar"
     ];
 
-    public $customMembers = [];
+    protected $customMembers = [];
 
-    /**
-     * Key to what will be returned if object is treated as a string.
-     * May be overidden.
-     *
-     * @var string
-     */
-    protected $string = "displayName";
-
-    public function members() {
+    protected function stream() {
         return [
             "username" => $this->username(),
-            "displayName" => $this->displayName(),
+            "display_name" => $this->display_name(),
             "game" => $this->game(),
             "preview" => [
                 "small" => $this->smallPreview(),
@@ -65,10 +57,19 @@ abstract class Stream {
             "status" => $this->status(),
             "url" => $this->url(),
             "viewers" => $this->viewers(),
-            "id" => $this->streamID(),
-            "avatar" => $this->avatar()
+            "id" => $this->id(),
+            "avatar" => $this->avatar(),
+            "service" => $this->service
         ];
     }
+
+    /**
+     * Key to what will be returned if object is treated as a string.
+     * May be overidden.
+     *
+     * @var string
+     */
+    protected $string = "display_name";
 
     /**
      * String Method
@@ -76,7 +77,11 @@ abstract class Stream {
      * @return string
      */
     public final function __toString() {
-        return $this->members()[$this->string];
+        if (array_key_exists($this->string, $this->stream())) {
+            return $this->stream()[ $this->string ];
+        } elseif (array_key_exists($this->string, $this->customMembers)) {
+            return $this->customMembers[ $this->string ];
+        }
     }
 
     /**
@@ -97,13 +102,28 @@ abstract class Stream {
      * @return mixed
      */
     public final function __get(string $name) {
-        if (array_key_exists($name, $this->members())) {
-            return $this->members()[$name];
+        if (array_key_exists($name, $this->stream())) {
+            return $this->stream()[$name];
         } elseif (array_key_exists($name, $this->customMembers)) {
             return $this->customMembers[$name];
         } else {
             return NULL;
         }
+    }
+
+    public function get() {
+        $info = $this->stream();
+        $custom_info = $this->customMembers;
+        $final = array_merge($info, $custom_info);
+        return $final;
+    }
+
+    public function getJSON() {
+        return json_encode($this->get());
+    }
+
+    public function getObject() {
+        return (object) $this->get();
     }
 
     /**
@@ -125,10 +145,6 @@ abstract class Stream {
         }
     }
 
-    private function streamID() {
-        return ($this->append_id) ? $this->id().$this->service : $this->id();
-    }
-
     /**
      * Stream Username
      *
@@ -141,7 +157,7 @@ abstract class Stream {
      *
      * @return string
      */
-    abstract public function displayName();
+    abstract public function display_name();
 
     /**
      * Stream Game

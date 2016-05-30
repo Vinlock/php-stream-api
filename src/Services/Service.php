@@ -9,40 +9,73 @@
 namespace Vinlock\StreamAPI\Services;
 
 
+use Vinlock\StreamAPI\Exceptions\MultiStreamInstance;
 use Vinlock\StreamAPI\Stream;
+use Vinlock\StreamAPI\StreamDriver;
 
-abstract class Service {
+class Service {
 
-    /**
-     * @var Stream
-     */
-    protected $stream;
+    protected $streams;
 
-    public function getJSON() {
-        return json_encode($this->finalResult());
+    public function __construct($streams) {
+        $this->streams = $streams;
+    }
+
+    public function where($value, $key='username') {
+        foreach ($this->streams as &$arr) {
+            if ($arr->$key == $value) {
+                $item =& $arr;
+                return $item;
+            }
+        }
+    }
+
+    public function get() {
+        return $this->streams;
     }
 
     public function getArray() {
-        return $this->finalResult();
+        $streams = [];
+
+        /** @var \Vinlock\StreamAPI\StreamObjects\Stream $stream */
+        foreach ($this->streams as $stream) {
+            array_push($streams, $stream->get());
+        }
+
+        return $streams;
+    }
+
+    public function getJSON() {
+        return json_encode($this->getArray());
     }
 
     public function getObject() {
-        return (object) $this->finalResult();
+        return (object) $this->getArray();
     }
 
-    public function __get(string $var) {
-        return $this->stream->$var;
+    public static function sortViewers(&$streams) {
+        usort($streams, function($a, $b) {
+            return $b->viewers - $a->viewers;
+        });
     }
 
-    public function __set(string $var, $value) {
-        $this->stream->$var = $value;
+    public function sort() {
+        usort($this->streams, function($a, $b) {
+            return $b->viewers - $a->viewers;
+        });
     }
 
-    private function finalResult() {
-        $info = $this->stream->members();
-        $custom_info = $this->stream->customMembers;
-        $final = array_merge($info, $custom_info);
-        return $final;
+    public static function merge() {
+        $array = [];
+        foreach (func_get_args() as $param) {
+            foreach ($param->get() as $obj) {
+                array_push($array, $obj);
+            }
+        }
+        usort($array, function($a, $b) {
+            return $b->viewers - $a->viewers;
+        });
+        return new Service($array);
     }
 
 }

@@ -9,6 +9,9 @@
 namespace Vinlock\StreamAPI;
 
 
+use Vinlock\StreamAPI\StreamObjects\Hitbox;
+use Vinlock\StreamAPI\StreamObjects\Twitch;
+
 abstract class StreamDriver {
 
     /**
@@ -23,25 +26,10 @@ abstract class StreamDriver {
      *
      * @var array
      */
-    private static $providers = [
-        "twitch" => Twitch\StreamObject::class,
-        "hitbox" => Hitbox\StreamObject::class
+    public static $providers = [
+        "twitch" => Twitch::class,
+        "hitbox" => Hitbox::class
     ];
-
-    /**
-     * Retrieve a single stream.
-     *
-     * @param string $username
-     * @param string $service
-     * @return mixed
-     */
-    final public static function SingleStream(string $username, string $service) {
-        var_dump($username);
-        exit();
-        $json = json_decode(\Requests::get(self::$providers[$service]::STREAM_API . $username), TRUE);
-        $streamObject = new self::$providers[$service]($json[self::$providers[$service]::STREAM_KEY][0]);
-        return $streamObject;
-    }
 
     /**
      * Retrieve an array of streams.
@@ -50,14 +38,14 @@ abstract class StreamDriver {
      * @param string $service
      * @return array
      */
-    final public static function MultiStream(array $stream_usernames, string $service) {
+    final public static function getStream(array $stream_usernames, string $service) {
         $streams = array();
 
         $chunks = array_chunk($stream_usernames, self::NUM_PER_MULTI);
 
         foreach ($chunks as $chunk) {
             $list = implode(",", $chunk);
-            $json = json_decode(\Requests::get(self::$providers[$service]::STREAM_API.$list), TRUE);
+            $json = json_decode(\Requests::get(self::$providers[$service]::STREAM_API.$list)->body, TRUE);
             foreach ($json[self::$providers[$service]::STREAM_KEY] as $stream) {
                 $streamObject = new self::$providers[$service]($stream);
                 array_push($streams, $streamObject);
