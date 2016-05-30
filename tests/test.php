@@ -7,14 +7,26 @@
  */
 
 require_once ("../vendor/autoload.php");
+//
+//$twitch = new \Vinlock\StreamAPI\Services\Twitch(['trick2g', 'mufflermankr', 'sirhcez', 'opsct', 'gamesager', 'praetor19', 'nl_Kripp']);
+//$twitch->where("trick2g")->hi = "hello";
+//
+//$hitbox = new \Vinlock\StreamAPI\Services\Hitbox(['tophatsandchampagne']);
+//
+//$merge = \Vinlock\StreamAPI\Services\Service::merge($twitch, $hitbox);
+//
+//header('Content-Type: application/json');
+//
+//echo $merge->getJSON();
 
-$twitch = new \Vinlock\StreamAPI\Services\Twitch(['trick2g', 'mufflermankr', 'sirhcez', 'opsct', 'gamesager', 'praetor19', 'nl_Kripp']);
-$twitch->where("trick2g")->hi = "hello";
+$twitch = \Vinlock\StreamAPI\Services\Twitch::game("Dota 2");
 
-$hitbox = new \Vinlock\StreamAPI\Services\Hitbox(['tophatsandchampagne']);
+$hitbox = \Vinlock\StreamAPI\Services\Hitbox::game("Dota 2");
 
 $merge = \Vinlock\StreamAPI\Services\Service::merge($twitch, $hitbox);
 
 header('Content-Type: application/json');
 
 echo $merge->getJSON();
+
+//echo $streams->getJSON();

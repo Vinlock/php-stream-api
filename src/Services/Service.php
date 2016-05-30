@@ -9,9 +9,7 @@
 namespace Vinlock\StreamAPI\Services;
 
 
-use Vinlock\StreamAPI\Exceptions\MultiStreamInstance;
 use Vinlock\StreamAPI\Stream;
-use Vinlock\StreamAPI\StreamDriver;
 
 class Service {
 
@@ -76,6 +74,10 @@ class Service {
             return $b->viewers - $a->viewers;
         });
         return new Service($array);
+    }
+
+    public function cut($num=10) {
+        return new Service(array_slice($this->streams, 0, $num));
     }
 
 }

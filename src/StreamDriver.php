@@ -54,6 +54,22 @@ abstract class StreamDriver {
         return $streams;
     }
 
+    final public static function byGame(string $game, string $service) {
+        $streams = array();
+
+        $game = urlencode($game);
+        $stream_key = self::$providers[$service]::STREAM_KEY;
+
+        $json = json_decode(\Requests::get(self::$providers[$service]::GAMES_API.$game."&limit=".self::NUM_PER_MULTI)->body, TRUE);
+        if (!empty($json[$stream_key])) {
+            foreach ($json[$stream_key] as $stream) {
+                $streamObject = new self::$providers[$service]($stream);
+                array_push($streams, $streamObject);
+            }
+        }
+        return $streams;
+    }
+
     /**
      * Get the JSON data with CURL
      *

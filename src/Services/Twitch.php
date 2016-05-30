@@ -17,10 +17,15 @@ class Twitch extends Service {
 
     function __construct($usernames) {
         if (!is_array($usernames) && is_string($usernames)) {
-            $array = [$usernames];
+            $array = [ $usernames ];
         }
 
         $this->streams = StreamDriver::getStream($usernames, 'twitch');
+    }
+
+    public static function game($game) {
+        $streams = StreamDriver::byGame($game, 'twitch');
+        return new Service($streams);
     }
 
 }

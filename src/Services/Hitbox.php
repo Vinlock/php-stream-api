@@ -21,4 +21,9 @@ class Hitbox extends Service {
         $this->streams = StreamDriver::getStream($usernames, 'hitbox');
     }
 
+    public static function game($game) {
+        $streams = StreamDriver::byGame($game, 'hitbox');
+        return new Service($streams);
+    }
+
 }
