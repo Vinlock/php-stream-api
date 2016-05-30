@@ -14,6 +14,8 @@ use Vinlock\StreamAPI\StreamInterface;
 
 class StreamObject extends Stream implements StreamInterface {
 
+    protected $service = 'hitbox';
+
     const STREAM_KEY = "livestream";
 
     const STREAM_API = "https://www.hitbox.tv/api/media/live/";
@@ -25,7 +27,7 @@ class StreamObject extends Stream implements StreamInterface {
     const STREAM_URL = "http://www.hitbox.tv/";
 
     public function __construct($array) {
-
+        $this->stream = $array;
     }
 
     /**
@@ -34,7 +36,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function username() {
-        // TODO: Implement username() method.
+        return $this->stream['channel']['name'];
     }
 
     /**
@@ -43,7 +45,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function displayName() {
-        // TODO: Implement displayName() method.
+        return $this->stream['channel']['display_name'];
     }
 
     /**
@@ -52,7 +54,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function game() {
-        // TODO: Implement game() method.
+        return $this->stream['game'];
     }
 
     /**
@@ -61,7 +63,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function largePreview() {
-        // TODO: Implement largePreview() method.
+        return $this->stream['preview']['large'];
     }
 
     /**
@@ -70,7 +72,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function mediumPreview() {
-        // TODO: Implement mediumPreview() method.
+        return $this->stream['preview']['medium'];
     }
 
     /**
@@ -79,7 +81,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function smallPreview() {
-        // TODO: Implement smallPreview() method.
+        return $this->stream['preview']['small'];
     }
 
     /**
@@ -88,7 +90,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function status() {
-        // TODO: Implement status() method.
+        return $this->stream['channel']['status'];
     }
 
     /**
@@ -97,7 +99,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function url() {
-        // TODO: Implement url() method.
+        return $this->stream['channel']['url'];
     }
 
     /**
@@ -106,7 +108,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return integer
      */
     public function viewers() {
-        // TODO: Implement viewers() method.
+        return $this->stream['viewers'];
     }
 
     /**
@@ -115,7 +117,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function id() {
-        // TODO: Implement id() method.
+        return $this->stream['_id'];
     }
 
     /**
@@ -124,7 +126,7 @@ class StreamObject extends Stream implements StreamInterface {
      * @return string
      */
     public function avatar() {
-        // TODO: Implement avatar() method.
+        return $this->stream['channel']['logo'];
     }
 
 }

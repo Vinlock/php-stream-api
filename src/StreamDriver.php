@@ -36,6 +36,8 @@ abstract class StreamDriver {
      * @return mixed
      */
     final public static function SingleStream(string $username, string $service) {
+        var_dump($username);
+        exit();
         $json = json_decode(\Requests::get(self::$providers[$service]::STREAM_API . $username), TRUE);
         $streamObject = new self::$providers[$service]($json[self::$providers[$service]::STREAM_KEY][0]);
         return $streamObject;

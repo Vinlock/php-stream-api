@@ -24,6 +24,8 @@ abstract class Stream {
      */
     protected $stream;
 
+    protected $service;
+
     /**
      * Append Stream Service to ID
      *
@@ -40,7 +42,7 @@ abstract class Stream {
         "username", "displayName", "preview", "status", "url", "viewers", "id", "avatar"
     ];
 
-    protected $customMembers = [];
+    public $customMembers = [];
 
     /**
      * Key to what will be returned if object is treated as a string.
@@ -50,7 +52,7 @@ abstract class Stream {
      */
     protected $string = "displayName";
 
-    protected function members() {
+    public function members() {
         return [
             "username" => $this->username(),
             "displayName" => $this->displayName(),
@@ -95,7 +97,13 @@ abstract class Stream {
      * @return mixed
      */
     public final function __get(string $name) {
-        return $this->members()[$name];
+        if (array_key_exists($name, $this->members())) {
+            return $this->members()[$name];
+        } elseif (array_key_exists($name, $this->customMembers)) {
+            return $this->customMembers[$name];
+        } else {
+            return NULL;
+        }
     }
 
     /**
@@ -118,9 +126,9 @@ abstract class Stream {
     }
 
     private function streamID() {
-        return ($this->append_id) ? $this->id().strtolower(get_class()) : $this->id();
+        return ($this->append_id) ? $this->id().$this->service : $this->id();
     }
-    
+
     /**
      * Stream Username
      *
