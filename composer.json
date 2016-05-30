@@ -1,0 +1,20 @@
+{
+  "name": "Vinlock/stream-api",
+  "description": "PHP API Wrapper for Streams",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Dak Washbrook",
+      "email": "dak@dakw.me"
+    }
+  ],
+  "require": {
+    "rmccue/requests": "v1.6.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "Vinlock\\StreamAPI\\": "src/"
+    }
+  }
+}
