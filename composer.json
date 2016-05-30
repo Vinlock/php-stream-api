@@ -1,5 +1,5 @@
 {
-  "name": "Vinlock/stream-api",
+  "name": "vinlock/stream-api",
   "description": "PHP API Wrapper for Stream Services such as Twitch.tv and Hitbox.tv",
   "homepage": "https://github.com/Vinlock/stream-api",
   "minimum-stability": "stable",
