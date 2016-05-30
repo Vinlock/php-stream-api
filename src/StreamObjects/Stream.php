@@ -126,6 +126,10 @@ abstract class Stream {
         return (object) $this->get();
     }
 
+    public function delete() {
+        unset($this);
+    }
+
     /**
      * Stream Preview
      *
