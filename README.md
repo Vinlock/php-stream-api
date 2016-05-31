@@ -1,5 +1,8 @@
-PHP API Wrapper for multiple streaming services. Currently supporting Twitch.tv and Hitbox.tv.
+PHP API Wrapper for multiple streaming services.
 
+#### Supported Service Providers
+* [Twitch.tv](http://www.twitch.tv)
+* [Hitbox.tv](http://www.hitbox.tv)
 
 ## Install via Composer
 
@@ -50,6 +53,7 @@ echo $merge->getObject();   // Object
 ```
 
 ## Example JSON
+This will be universal for every stream provider.
 ```json
 [
     {
