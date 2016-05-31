@@ -50,3 +50,27 @@ echo $merge->getObject();   // Object
 ```
 
 ## Example JSON
+```json
+[
+    {
+        "username": "trick2g",
+        "display_name": "Trick2g",
+        "game": "League of Legends",
+        "preview": {
+            "small": "https://static-cdn.jtvnw.net/previews-ttv/live_user_trick2g-80x45.jpg",
+            "medium": "https://static-cdn.jtvnw.net/previews-ttv/live_user_trick2g-320x180.jpg",
+            "large": "https://static-cdn.jtvnw.net/previews-ttv/live_user_trick2g-640x360.jpg"
+        },
+        "status": "100% Advan | Silver Clown Fiesta 101 How to TDM #Na Throws @Trick2g Day 35 No Sodabull",
+        "bio": "Opening the Gates",
+        "url": "https://www.twitch.tv/trick2g",
+        "viewers": 4040,
+        "id": 28036688,
+        "avatar": "https://static-cdn.jtvnw.net/jtv_user_pictures/trick2g-profile_image-291046f75304f006-300x300.jpeg",
+        "service": "twitch",
+        "followers": 996140,
+        "created_at": "05-31-2016 01:15:12",
+        "updated_at": "05-31-2016 03:36:19"
+    }
+]
+```
