@@ -10,5 +10,5 @@ namespace Vinlock\StreamAPI\Exceptions;
 
 
 class APIError extends \Exception {
-
+//
 }

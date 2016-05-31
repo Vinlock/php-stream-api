@@ -13,17 +13,32 @@ use Vinlock\StreamAPI\StreamDriver;
 
 class Hitbox extends Service {
 
-    function __construct($usernames) {
-        if (!is_array($usernames) && is_string($usernames)) {
-            $array = [$usernames];
+    function __construct() {
+        $array = func_get_args();
+        $usernames = [];
+        foreach ($array as $param) {
+            if (is_array($param)) {
+                $usernames = $param;
+            } elseif (is_string($param)) {
+                array_push($usernames, $param);
+            }
         }
-
         $this->streams = StreamDriver::getStream($usernames, 'hitbox');
     }
 
-    public static function game($game) {
-        $streams = StreamDriver::byGame($game, 'hitbox');
-        return new Service($streams);
+    public static function game() {
+        $limit = StreamDriver::NUM_PER_MULTI;
+        $all_streams = [];
+        foreach (func_get_args() as $param) {
+            if (is_int($param)) {
+                $limit = $param;
+            } elseif (is_string($param)) {
+                $all_streams = array_merge($all_streams, StreamDriver::byGame($param, 'hitbox', $limit));
+            }
+        }
+        $streams = new Service($all_streams);
+        $streams->sort();
+        return $streams;
     }
 
 }

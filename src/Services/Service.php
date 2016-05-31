@@ -15,7 +15,7 @@ class Service {
 
     protected $streams;
 
-    public function __construct($streams) {
+    public function __construct(array $streams) {
         $this->streams = $streams;
     }
 
@@ -43,7 +43,7 @@ class Service {
         return $streams;
     }
 
-    public function getJSON($pretty=FALSE) {
+    public function getJSON(bool $pretty=FALSE) {
         return json_encode($this->getArray(), ($pretty) ? JSON_PRETTY_PRINT : NULL);
     }
 
@@ -70,7 +70,7 @@ class Service {
         return new Service($array);
     }
 
-    public function cut($num=10) {
+    public function cut(int $num=10) {
         return new Service(array_slice($this->streams, 0, $num));
     }
 

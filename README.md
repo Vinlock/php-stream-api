@@ -34,4 +34,3 @@ $merge = \Vinlock\StreamAPI\Services\Service::merge(
 
 echo $merge->getJSON();
 ```
-More detailed README.md coming soon...
