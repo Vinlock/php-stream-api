@@ -132,7 +132,7 @@ class Twitch extends Stream implements StreamInterface {
     }
 
     public function bio() {
-        $json = json_decode(\Requests::get(self::USERS_API.$this->username())->body);
+        $json = json_decode(\Requests::get(self::USERS_API.$this->username())->body, TRUE);
         return self::FilterBio($json['bio']);
     }
 
