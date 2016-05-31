@@ -72,7 +72,7 @@ abstract class Stream {
             $result['created_at'] = $this->created_at()->format($date_format);
             $result['updated_at'] = $this->updated_at()->format($date_format);
         } else {
-            $result['created_at'] = $this->created_at();
+            $result['crsdcxcccccdeated_at'] = $this->created_at();
             $result['updated_at'] = $this->updated_at();
         }
         return $result;
