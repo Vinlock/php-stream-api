@@ -75,6 +75,7 @@ abstract class Stream {
             $result['created_at'] = $this->created_at();
             $result['updated_at'] = $this->updated_at();
         }
+        return $result;
     }
 
     /**
