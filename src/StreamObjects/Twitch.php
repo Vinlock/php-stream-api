@@ -141,6 +141,8 @@ class Twitch extends Stream implements StreamInterface {
     }
 
     public function updated_at() {
+        var_dump($this->stream);
+        exit();
         return new \DateTime($this->stream['updated_at']);
     }
 
