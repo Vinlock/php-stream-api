@@ -57,9 +57,12 @@ class Service {
         });
     }
 
-    public static function merge() {
+    public static function merge($arr = NULL) {
+        if (!is_array($arr)) {
+            $arr = func_get_args();
+        }
         $array = [];
-        foreach (func_get_args() as $param) {
+        foreach ($arr as $param) {
             foreach ($param->get() as $obj) {
                 array_push($array, $obj);
             }
