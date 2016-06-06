@@ -59,12 +59,32 @@ Results will only show for online users.
 ```php
 $twitch = new \Vinlock\StreamAPI\Services\Twitch("vinlockz");
 $hitbox = new \Vinlock\StreamAPI\Services\Hitbox("vinlock");
+```
+Or pass many usernames as an array.
+```php
+$twitch_streams = [ "trick2g", "vinlockz", ... ];
+$hitbox_streams = [ "hitboxstream1", "hitboxstream2", ... ];
 
+$twitch = new \Vinlock\StreamAPI\Services\Twitch($twitch_streams);
+$hitbox = new \Vinlock\StreamAPI\Services\Twitch($hitbox_streams);
+```
+Then merge these as well.
+```php
 $merge = \Vinlock\StreamAPI\Services\Service::merge($twitch, $hitbox);
 // or
 $merge = \Vinlock\StreamAPI\Services\Service::merge( [ $twitch, $hitbox ] );
 
 echo $merge->getJSON();     // Displays the information for all streams merged as JSON.
+```
+
+## Universal Merging
+```php
+$bladeandsoul_twitch = \Vinlock\StreamAPI\Services\Twitch::game("Blade and Soul");
+$twitch = new \Vinlock\StreamAPI\Services\Twitch("vinlockz");
+
+$merge = \Vinlock\StreamAPI\Services\Service::merge($twitch, $bladeandsoul_twitch);
+
+$merge->getJSON();
 ```
 
 ### Data Retrieval
