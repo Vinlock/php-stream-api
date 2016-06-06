@@ -12,16 +12,40 @@ namespace Vinlock\StreamAPI\Services;
 use Vinlock\StreamAPI\StreamDriver;
 use Vinlock\StreamAPI\StreamObjects\Stream;
 
+/**
+ * Class Service
+ * @package Vinlock\StreamAPI\Services
+ */
 class Service {
 
+    /**
+     *
+     *
+     * @var array
+     */
     protected $streams;
 
+    /**
+     * Current Service
+     *
+     * @var null
+     */
     protected static $service = NULL;
 
+    /**
+     * Service constructor.
+     * @param array $streams
+     */
     public function __construct(array $streams) {
         $this->streams = $streams;
     }
 
+    /**
+     * Universal Constructor for Child Stream Services
+     *
+     * @param $array
+     * @return array
+     */
     protected function service_construct($array) {
         $usernames = [];
         foreach ($array as $param) {
@@ -34,6 +58,14 @@ class Service {
         return StreamDriver::getStreams($usernames, static::$service);
     }
 
+    /**
+     * Find a stream where key = value.
+     * Defaults key to username.
+     *
+     * @param $value
+     * @param string $key
+     * @return mixed
+     */
     public function where($value, $key='username') {
         foreach ($this->streams as &$arr) {
             if ($arr->$key == $value) {
@@ -42,17 +74,34 @@ class Service {
             }
         }
     }
-    
+
+    /**
+     * Give ALL streams a key=value pair.
+     * You can only set a key once. After it may not be modified.
+     *
+     * @param string $name
+     * @param $value
+     */
     public function __set(string $name, $value) {
         foreach ($this->streams as $stream) {
             $stream->$name = $value;
         }
     }
 
+    /**
+     * Get the streams as an array of /StreamObjects/Stream
+     *
+     * @return array
+     */
     public function get() {
         return $this->streams;
     }
 
+    /**
+     * Get the streams as an array.
+     *
+     * @return array
+     */
     public function getArray() {
         $streams = [];
 
@@ -64,14 +113,31 @@ class Service {
         return $streams;
     }
 
+    /**
+     * Get the streams as JSON.
+     *
+     * @param bool $pretty
+     * @return string
+     */
     public function getJSON(bool $pretty=FALSE) {
         return json_encode($this->getArray(), ($pretty) ? JSON_PRETTY_PRINT : NULL);
     }
 
+    /**
+     * Get the streams as an object.
+     *
+     * @return object
+     */
     public function getObject() {
         return (object) $this->getArray();
     }
 
+    /**
+     * Sort all streams by viewers.
+     * Highest to Lowest.
+     *
+     * @param null $sort
+     */
     public function sort($sort=NULL) {
         $sort = ($sort == NULL) ? $this->streams : $sort;
         usort($sort, function($a, $b) {
@@ -79,23 +145,54 @@ class Service {
         });
     }
 
-    public static function merge($arr = NULL) {
+    public function merge(Service $merge) {
+        $new_array = [];
+        /** @var Stream $merge_stream */
+        foreach ($merge->get() as $merge_stream) {
+            $found = FALSE;
+            /** @var Stream $stream */
+            foreach ($this->streams as $key => $stream) {
+                if ($stream->username === $merge_stream->username && $stream->service === $merge_stream->service) {
+                    if ($merge_stream->hasCustomKeys()) {
+                        $this->streams[$key] = $merge_stream;
+                    }
+                    $found = TRUE;
+                }
+            }
+            if (!$found) {
+                array_push($this->streams, $merge_stream);
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Merge two Service Objects together.
+     *
+     * @param null $arr
+     * @return Service
+     */
+    public static function mergeMulti($arr = NULL) {
         if (!is_array($arr)) {
             $arr = func_get_args();
         }
-        $array = [];
+        $first = NULL;
+        /** @var Service $param */
         foreach ($arr as $param) {
-            foreach ($param->get() as $obj) {
-                array_push($array, $obj);
+            if (is_null($first)) {
+                $first = $param;
             }
+            $first->merge($param);
         }
-        usort($array, function($a, $b) {
-            return $b->viewers() <=> $a->viewers();
-        });
-        $array = array_unique($array);
-        return new Service($array);
+        $first->sort();
+        return $first;
     }
 
+    /**
+     * Get streams of a game.
+     *
+     * @return Service
+     */
     public static function game() {
         $all_streams = [];
         foreach (func_get_args() as $param) {
@@ -112,12 +209,61 @@ class Service {
         return $streams;
     }
 
-    public function cut(int $num=10) {
+    public function removeDuplicates() {
+        $marker = substr(str_shuffle(MD5(microtime())), 0, 10);
+        $new_array = [];
+        /** @var Stream $stream */
+        foreach ($this->streams as $stream) {
+            /** @var Stream $check */
+            foreach ($this->stream as $check) {
+                $found = FALSE;
+                if ($stream->username === $check->username && $stream->service === $check->service) {
+                    if ($found) {
+                        $check->$marker = TRUE;
+                        continue;
+                    }
+                    if (!isset($check->$marker)) {
+                        if ($stream->hasCustomKeys()) {
+                            array_push($new_array, $stream);
+                        } else {
+                            array_push($new_array, $check);
+                        }
+                        $stream->$marker = TRUE;
+                        $check->$marker = TRUE;
+                        $found = TRUE;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        $this->streams = $new_array;
+    }
+
+    /**
+     * Truncate the streams.
+     *
+     * @param int $num 10
+     * @param bool $remove_duplicates
+     */
+    public function cut(int $num=10, $remove_duplicates = FALSE) {
+        if ($remove_duplicates) {
+            $this->removeDuplicates();
+        }
         $this->streams = array_slice($this->streams, 0, $num);
     }
 
+    /**
+     * Prepend Service object to this object.
+     *
+     * @param Service $service
+     */
     public function prepend(Service $service) {
-        $this->streams = array_push($service->streams, $this->streams);
+        $this->streams = array_push($service->get(), $this->streams);
+    }
+
+    public function attach(Service $service) {
+        $this->streams = array_push($this->streams, $service->get());
     }
 
 }

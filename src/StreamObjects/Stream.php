@@ -68,6 +68,10 @@ abstract class Stream {
         return $result;
     }
 
+    public function hasCustomKeys() {
+        return !empty($this->customMembers);
+    }
+
     /**
      * Key to what will be returned if object is treated as a string.
      * May be overidden.
@@ -131,9 +135,9 @@ abstract class Stream {
         return (object) $this->get();
     }
 
-    public function delete() {
-        unset($this);
-    }
+//    public function delete() {
+//        unset($this);
+//    }
 
     /**
      * Stream Preview
