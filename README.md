@@ -77,7 +77,7 @@ $merge = \Vinlock\StreamAPI\Services\Service::merge( [ $twitch, $hitbox ] );
 echo $merge->getJSON();     // Displays the information for all streams merged as JSON.
 ```
 
-## Universal Merging
+### Universal Merging
 ```php
 $bladeandsoul_twitch = \Vinlock\StreamAPI\Services\Twitch::game("Blade and Soul");
 $twitch = new \Vinlock\StreamAPI\Services\Twitch("vinlockz");
