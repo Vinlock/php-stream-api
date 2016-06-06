@@ -6,7 +6,7 @@ PHP API Wrapper for multiple streaming services.
 
 ## Install via Composer
 
-```
+```shell
 $ composer require vinlock/stream-api
 ```
 
@@ -36,6 +36,21 @@ $merge = \Vinlock\StreamAPI\Services\Service::merge(
     $overwatch_hitbox
 );
 
+// OR
+
+$games = [
+    "Blade and Soul",
+    "Overwatch",
+    "Aion Online"
+];
+
+$twitch = \Vinlock\StreamAPI\Services\Twitch::game($games);
+$hitbox = \Vinlock\StreamAPI\Services\Hitbox::game($games);
+
+$merge = \Vinlock\StreamAPI\Services\Service::merge($twitch, $hitbox);
+// or
+$merge = \Vinlock\StreamAPI\Services\Service::merge( [ $twitch, $hitbox ] );
+
 echo $merge->getJSON();
 ```
 
@@ -46,7 +61,15 @@ $twitch = new \Vinlock\StreamAPI\Services\Twitch("vinlockz");
 $hitbox = new \Vinlock\StreamAPI\Services\Hitbox("vinlock");
 
 $merge = \Vinlock\StreamAPI\Services\Service::merge($twitch, $hitbox);
+// or
+$merge = \Vinlock\StreamAPI\Services\Service::merge( [ $twitch, $hitbox ] );
 
+echo $merge->getJSON();     // Displays the information for all streams merged as JSON.
+```
+
+### Data Retrieval
+You can get an array, JSON, or object from the Service Object.
+```php
 echo $merge->getJSON();     // Displays the information for all streams merged as JSON.
 echo $merge->getArray();    // Array
 echo $merge->getObject();   // Object

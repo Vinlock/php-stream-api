@@ -18,17 +18,7 @@ class Twitch extends Service {
     protected static $service = "twitch";
 
     function __construct() {
-        $array = func_get_args();
-        $usernames = [];
-        foreach ($array as $param) {
-            if (is_array($param)) {
-                $usernames = $param;
-            } elseif (is_string($param)) {
-                array_push($usernames, $param);
-            }
-        }
-        $streams = StreamDriver::getStream($usernames, self::$service);
-
+        $streams = $this->service_construct(func_get_args());
         parent::__construct($streams);
     }
 

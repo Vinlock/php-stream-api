@@ -22,8 +22,7 @@ class Service {
         $this->streams = $streams;
     }
 
-    protected function service_construct() {
-        $array = func_get_args();
+    protected function service_construct($array) {
         $usernames = [];
         foreach ($array as $param) {
             if (is_array($param)) {
@@ -32,7 +31,7 @@ class Service {
                 array_push($usernames, $param);
             }
         }
-        return StreamDriver::getStream($usernames, self::$service);
+        return StreamDriver::getStreams($usernames, static::$service);
     }
 
     public function where($value, $key='username') {
@@ -108,6 +107,10 @@ class Service {
 
     public function cut(int $num=10) {
         $this->streams = array_slice($this->streams, 0, $num);
+    }
+
+    public function prepend(Service $service) {
+        $this->streams = array_push($service->streams, $this->streams);
     }
 
 }
