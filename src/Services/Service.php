@@ -42,6 +42,12 @@ class Service {
             }
         }
     }
+    
+    public function __set(string $name, $value) {
+        foreach ($this->streams as $stream) {
+            $stream->$name = $value;
+        }
+    }
 
     public function get() {
         return $this->streams;
