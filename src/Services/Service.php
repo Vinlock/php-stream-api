@@ -14,7 +14,7 @@ use Vinlock\StreamAPI\StreamDriver;
 
 class Service {
 
-    public $streams;
+    protected $streams;
 
     protected static $service = NULL;
 
@@ -107,7 +107,7 @@ class Service {
     }
 
     public function cut(int $num=10) {
-        return new Service(array_slice($this->streams, 0, $num));
+        $this->streams = array_slice($this->streams, 0, $num);
     }
 
 }
