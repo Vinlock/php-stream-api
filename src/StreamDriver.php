@@ -21,7 +21,7 @@ abstract class StreamDriver {
      */
     const NUM_PER_MULTI = 100;
 
-    protected static $limit = 100;
+    protected static $limit = NULL;
 
     /**
      * Class providers for each stream service.
@@ -56,8 +56,8 @@ abstract class StreamDriver {
         return $streams;
     }
 
-    final public static function byGame(string $game, string $service, int $limit=NULL) {
-        $limit = is_null($limit) ? self::$limit : self::NUM_PER_MULTI;
+    final public static function byGame(string $game, string $service) {
+        $limit = is_null(self::$limit) ? self::NUM_PER_MULTI : self::$limit;
         $streams = array();
 
         $game = urlencode($game);

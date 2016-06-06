@@ -91,17 +91,16 @@ class Service {
     }
 
     public static function game() {
-        $limit = StreamDriver::NUM_PER_MULTI;
         $all_streams = [];
         foreach (func_get_args() as $param) {
             if (is_int($param)) {
                 $limit = $param;
             } elseif (is_array($param)) {
                 foreach ($param as $game) {
-                    $all_streams = array_merge($all_streams, StreamDriver::byGame($game, static::$service, $limit));
+                    $all_streams = array_merge($all_streams, StreamDriver::byGame($game, static::$service));
                 }
             } elseif (is_string($param)) {
-                $all_streams = array_merge($all_streams, StreamDriver::byGame($param, static::$service, $limit));
+                $all_streams = array_merge($all_streams, StreamDriver::byGame($param, static::$service));
             }
         }
         $streams = new Service($all_streams);
