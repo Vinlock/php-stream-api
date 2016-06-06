@@ -35,9 +35,9 @@ $merge = \Vinlock\StreamAPI\Services\Service::merge(
     $overwatch_twitch, 
     $overwatch_hitbox
 );
-
-// OR
-
+```
+Or you may pass in the games as an array.
+```php
 $games = [
     "Blade and Soul",
     "Overwatch",
@@ -48,7 +48,7 @@ $twitch = \Vinlock\StreamAPI\Services\Twitch::game($games);
 $hitbox = \Vinlock\StreamAPI\Services\Hitbox::game($games);
 
 $merge = \Vinlock\StreamAPI\Services\Service::merge($twitch, $hitbox);
-// or
+// or pass the Service Objects as an array to be merged.
 $merge = \Vinlock\StreamAPI\Services\Service::merge( [ $twitch, $hitbox ] );
 
 echo $merge->getJSON();
