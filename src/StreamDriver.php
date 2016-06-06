@@ -57,9 +57,7 @@ abstract class StreamDriver {
     }
 
     final public static function byGame(string $game, string $service, int $limit=NULL) {
-        if (is_null($limit)) {
-            $limit = self::$limit;
-        }
+        $limit = is_null($limit) ? self::$limit : self::NUM_PER_MULTI;
         $streams = array();
 
         $game = urlencode($game);
