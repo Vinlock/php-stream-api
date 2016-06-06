@@ -9,8 +9,8 @@
 namespace Vinlock\StreamAPI\Services;
 
 
-use Vinlock\StreamAPI\Stream;
 use Vinlock\StreamAPI\StreamDriver;
+use Vinlock\StreamAPI\StreamObjects\Stream;
 
 class Service {
 
