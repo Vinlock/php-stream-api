@@ -92,6 +92,7 @@ class Service {
         usort($array, function($a, $b) {
             return $b->viewers() <=> $a->viewers();
         });
+        $array = array_unique($array);
         return new Service($array);
     }
 
