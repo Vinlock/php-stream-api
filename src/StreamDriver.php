@@ -75,7 +75,7 @@ abstract class StreamDriver {
         return $streams;
     }
 
-    final public function setLimit(int $limit) {
+    final public static function setLimit(int $limit) {
         self::$limit = $limit;
     }
 
