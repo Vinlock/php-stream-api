@@ -93,9 +93,7 @@ class Service {
     public static function game() {
         $all_streams = [];
         foreach (func_get_args() as $param) {
-            if (is_int($param)) {
-                $limit = $param;
-            } elseif (is_array($param)) {
+            if (is_array($param)) {
                 foreach ($param as $game) {
                     $all_streams = array_merge($all_streams, StreamDriver::byGame($game, static::$service));
                 }
