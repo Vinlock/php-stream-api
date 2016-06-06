@@ -10,13 +10,29 @@ namespace Vinlock\StreamAPI\Services;
 
 
 use Vinlock\StreamAPI\Stream;
+use Vinlock\StreamAPI\StreamDriver;
 
 class Service {
 
-    protected $streams;
+    public $streams;
+
+    protected static $service = NULL;
 
     public function __construct(array $streams) {
         $this->streams = $streams;
+    }
+
+    protected function service_construct() {
+        $array = func_get_args();
+        $usernames = [];
+        foreach ($array as $param) {
+            if (is_array($param)) {
+                $usernames = $param;
+            } elseif (is_string($param)) {
+                array_push($usernames, $param);
+            }
+        }
+        return StreamDriver::getStream($usernames, self::$service);
     }
 
     public function where($value, $key='username') {
@@ -51,9 +67,10 @@ class Service {
         return (object) $this->getArray();
     }
 
-    public function sort() {
-        usort($this->streams, function($a, $b) {
-            return $b->viewers - $a->viewers;
+    public function sort($sort=NULL) {
+        $sort = ($sort == NULL) ? $this->streams : $sort;
+        usort($sort, function($a, $b) {
+            return $b->viewers() <=> $a->viewers();
         });
     }
 
@@ -68,9 +85,28 @@ class Service {
             }
         }
         usort($array, function($a, $b) {
-            return $b->viewers - $a->viewers;
+            return $b->viewers() <=> $a->viewers();
         });
         return new Service($array);
+    }
+
+    public static function game() {
+        $limit = StreamDriver::NUM_PER_MULTI;
+        $all_streams = [];
+        foreach (func_get_args() as $param) {
+            if (is_int($param)) {
+                $limit = $param;
+            } elseif (is_array($param)) {
+                foreach ($param as $game) {
+                    $all_streams = array_merge($all_streams, StreamDriver::byGame($game, static::$service, $limit));
+                }
+            } elseif (is_string($param)) {
+                $all_streams = array_merge($all_streams, StreamDriver::byGame($param, static::$service, $limit));
+            }
+        }
+        $streams = new Service($all_streams);
+        $streams->sort();
+        return $streams;
     }
 
     public function cut(int $num=10) {

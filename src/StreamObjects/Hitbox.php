@@ -137,11 +137,11 @@ class Hitbox extends Stream implements StreamInterface {
     }
 
     public function created_at() {
-        return $this->stream['media_date_added'];
+        return new \DateTime($this->stream['media_date_added']);
     }
 
     public function updated_at() {
-        return $this->stream['media_live_since'];
+        return new \DateTime($this->stream['media_live_since']);
     }
 
     public function followers() {

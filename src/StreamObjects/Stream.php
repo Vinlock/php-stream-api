@@ -26,8 +26,6 @@ abstract class Stream {
 
     protected $service;
 
-    protected $time_format = "m-d-Y H:i:s";
-
     /**
      * Append Stream Service to ID
      *
@@ -46,7 +44,7 @@ abstract class Stream {
 
     protected $customMembers = [];
 
-    protected function stream($date_format = TRUE) {
+    protected function stream($date_format = "m-d-Y H:i:s") {
         $result = [
             "username" => $this->username(),
             "display_name" => $this->display_name(),
@@ -63,18 +61,10 @@ abstract class Stream {
             "id" => $this->id(),
             "avatar" => $this->avatar(),
             "service" => $this->service,
-            "followers" => $this->followers()
+            "followers" => $this->followers(),
+            "created_at" => $this->created_at()->format($date_format),
+            "updated_at" => $this->created_at()->format($date_format)
         ];
-        if ($date_format === TRUE) {
-            $result['created_at'] = $this->created_at()->format($this->time_format);
-            $result['updated_at'] = $this->updated_at()->format($this->time_format);
-        } elseif ($date_format) {
-            $result['created_at'] = $this->created_at()->format($date_format);
-            $result['updated_at'] = $this->updated_at()->format($date_format);
-        } else {
-            $result['crsdcxcccccdeated_at'] = $this->created_at();
-            $result['updated_at'] = $this->updated_at();
-        }
         return $result;
     }
 

@@ -15,6 +15,8 @@ use Vinlock\StreamAPI\StreamObjects\Stream;
 
 class Twitch extends Service {
 
+    protected static $service = "twitch";
+
     function __construct() {
         $array = func_get_args();
         $usernames = [];
@@ -25,22 +27,9 @@ class Twitch extends Service {
                 array_push($usernames, $param);
             }
         }
-        $this->streams = StreamDriver::getStream($usernames, 'twitch');
-    }
+        $streams = StreamDriver::getStream($usernames, self::$service);
 
-    public static function game() {
-        $limit = StreamDriver::NUM_PER_MULTI;
-        $all_streams = [];
-        foreach (func_get_args() as $param) {
-            if (is_int($param)) {
-                $limit = $param;
-            } elseif (is_string($param)) {
-                $all_streams = array_merge($all_streams, StreamDriver::byGame($param, 'twitch', $limit));
-            }
-        }
-        $streams = new Service($all_streams);
-        $streams->sort();
-        return $streams;
+        parent::__construct($streams);
     }
 
 }
