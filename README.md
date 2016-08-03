@@ -78,6 +78,7 @@ echo $merge->getJSON();     // Displays the information for all streams merged a
 ```
 
 ### Universal Merging
+You may merge instances initialized by usernames with ones initialized by Games.
 ```php
 $bladeandsoul_twitch = \Vinlock\StreamAPI\Services\Twitch::game("Blade and Soul");
 $twitch = new \Vinlock\StreamAPI\Services\Twitch("vinlockz");
