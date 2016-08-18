@@ -138,10 +138,14 @@ class Service {
      *
      * @param null $sort
      */
-    public function sort($sort=NULL) {
+    public function sort($sort=NULL, $byKey="viewers", $direction="desc") {
         $sort = ($sort == NULL) ? $this->streams : $sort;
-        usort($sort, function($a, $b) {
-            return $b->viewers() <=> $a->viewers();
+        usort($sort, function($a, $b) use ($direction) {
+            if ($direction == "desc") {
+                return $b->$byKey() <=> $a->$byKey();
+            } elseif $direction == "asc" {
+                return $a->$byKey() <=> $b->$byKey();
+            }
         });
     }
 
