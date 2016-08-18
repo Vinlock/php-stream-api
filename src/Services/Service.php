@@ -133,10 +133,13 @@ class Service {
     }
 
     /**
-     * Sort all streams by viewers.
-     * Highest to Lowest.
+     * Sort all streams by default viewers.
+     * May set $byKey to whcih key to sort by.
+     * Highest to Lowest or set direction.
      *
      * @param null $sort
+     * @param string $byKey
+     * @param string $direction
      */
     public function sort($sort=NULL, $byKey="viewers", $direction="desc") {
         $sort = ($sort == NULL) ? $this->streams : $sort;
