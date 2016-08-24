@@ -16,7 +16,7 @@ class MultiStreamInstance extends APIError {
     protected $code = 400;
 
     public function __construct($var) {
-        $message = $this->message . " \${$var}" cannot be set.";
+        $message = "{$this->message} - \${$var} cannot be set.";
 
         parent::__construct($this->message, $this->code, NULL);
     }
