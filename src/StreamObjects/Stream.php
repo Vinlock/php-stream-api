@@ -27,7 +27,7 @@ abstract class Stream {
     protected $service;
 
     /**
-     * Append Stream Service to ID
+     * Append Stream Service Tag to ID
      *
      * @var bool
      */
