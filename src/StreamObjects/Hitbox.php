@@ -15,15 +15,15 @@ class Hitbox extends Stream implements StreamInterface {
 
     protected $service = 'hitbox';
 
-    const STREAM_KEY = "livestream";
+    const STREAM_KEY = 'livestream';
 
-    const STREAM_API = "https://www.hitbox.tv/api/media/live/";
+    const STREAM_API = 'https://www.hitbox.tv/api/media/live/';
 
-    const GAMES_API = "https://api.hitbox.tv/media/live/list?game=";
+    const GAMES_API = 'https://api.hitbox.tv/media/live/list?game=';
 
-    const STREAM_IMG = "http://edge.sf.hitbox.tv";
+    const STREAM_IMG = 'http://edge.sf.hitbox.tv';
 
-    const STREAM_URL = "http://www.hitbox.tv/";
+    const STREAM_URL = 'http://www.hitbox.tv/';
 
     public function __construct($array) {
         $this->stream = $array;
