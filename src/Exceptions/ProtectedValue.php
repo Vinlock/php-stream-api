@@ -11,16 +11,12 @@ namespace Vinlock\StreamAPI\Exceptions;
 
 class ProtectedValue extends APIError {
 
-    protected $var;
-
     protected $message = "You have attempted to set a value that is not able to be set.";
 
     protected $code = 400;
 
     public function __construct($var) {
-        $this->var = $var;
-
-        $message = $this->message . " $".$var." cannot be set.";
+        $message = "{$this->message} - \${$var} cannot be set.";
 
         parent::__construct($this->message, $this->code, NULL);
     }
