@@ -46,7 +46,7 @@ abstract class StreamDriver {
         $chunks = array_chunk($stream_usernames, self::NUM_PER_MULTI);
 
         foreach ($chunks as $chunk) {
-            $list = implode(",", $chunk);
+            $list = implode(',', $chunk);
             $json = json_decode(\Requests::get(self::$providers[$service]::STREAM_API.$list)->body, TRUE);
             foreach ($json[self::$providers[$service]::STREAM_KEY] as $stream) {
                 $streamObject = new self::$providers[$service]($stream);
@@ -63,7 +63,7 @@ abstract class StreamDriver {
         $game = urlencode($game);
         $stream_key = self::$providers[$service]::STREAM_KEY;
 
-        $json = json_decode(\Requests::get(self::$providers[$service]::GAMES_API.$game."&limit=".$limit)->body, TRUE);
+        $json = json_decode(\Requests::get(self::$providers[$service]::GAMES_API."{$game}&limit={$limit}")->body, TRUE);
         if (!empty($json[$stream_key])) {
             foreach ($json[$stream_key] as $stream) {
                 $streamObject = new self::$providers[$service]($stream);
@@ -83,15 +83,15 @@ abstract class StreamDriver {
      * @param $url
      * @return mixed
      */
-    final private static function curl_get_contents($url) {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        $data = curl_exec($ch);
-        curl_close($ch);
-        return $data;
-    }
+    // final private static function curl_get_contents($url) {
+    //     $ch = curl_init($url);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    //     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    //     $data = curl_exec($ch);
+    //     curl_close($ch);
+    //     return $data;
+    // }
 
 }
