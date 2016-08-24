@@ -15,17 +15,17 @@ class Twitch extends Stream implements StreamInterface {
 
     public $service = 'twitch';
 
-    const STREAM_KEY = "streams";
+    const STREAM_KEY = 'streams';
 
-    const STREAM_API = "https://api.twitch.tv/kraken/streams?channel=";
+    const STREAM_API = 'https://api.twitch.tv/kraken/streams?channel=';
 
-    const GAMES_API = "https://api.twitch.tv/kraken/streams?game=";
+    const GAMES_API = 'https://api.twitch.tv/kraken/streams?game=';
 
-    const USERS_API = "https://api.twitch.tv/kraken/users/";
+    const USERS_API = 'https://api.twitch.tv/kraken/users/';
 
-    const STREAM_URL = "http://www.twitch.tv/";
+    const STREAM_URL = 'http://www.twitch.tv/';
 
-    const DEFAULT_AVATAR = "http://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png";
+    const DEFAULT_AVATAR = 'http://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png';
 
     public function __construct($array) {
         $this->stream = $array;
