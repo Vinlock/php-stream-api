@@ -39,12 +39,12 @@ abstract class Stream {
      * @var array
      */
     private $guarded = [
-        "username", "display_name", "preview", "status", "url", "viewers", "id", "avatar"
+        'username', 'display_name', 'preview', 'status', 'url', 'viewers', 'id', 'avatar'
     ];
 
     protected $customMembers = [];
 
-    protected function stream($date_format = "m-d-Y H:i:s") {
+    protected function stream($date_format = 'm-d-Y H:i:s') {
         $result = [
             "username" => $this->username(),
             "display_name" => $this->display_name(),
@@ -78,7 +78,7 @@ abstract class Stream {
      *
      * @var string
      */
-    protected $string = "display_name";
+    protected $string = 'display_name';
 
     /**
      * String Method
