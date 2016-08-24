@@ -11,7 +11,7 @@ namespace Vinlock\StreamAPI\Exceptions;
 
 class ProtectedValue extends APIError {
 
-    protected $message = "You have attempted to set a value that is not able to be set.";
+    protected $message = "You have attempted to set a value that is protected.";
 
     protected $code = 400;
 
