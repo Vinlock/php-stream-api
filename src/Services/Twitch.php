@@ -9,10 +9,6 @@
 namespace Vinlock\StreamAPI\Services;
 
 
-
-use Vinlock\StreamAPI\StreamDriver;
-use Vinlock\StreamAPI\StreamObjects\Stream;
-
 class Twitch extends Service {
 
     protected static $service = "twitch";

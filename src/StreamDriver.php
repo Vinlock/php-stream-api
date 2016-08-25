@@ -48,9 +48,9 @@ abstract class StreamDriver {
         foreach ($chunks as $chunk) {
             $list = implode(',', $chunk);
             $json = json_decode(\Requests::get(self::$providers[$service]::STREAM_API.$list)->body, TRUE);
-            foreach ($json[self::$providers[$service]::STREAM_KEY] as $stream) {
-                $streamObject = new self::$providers[$service]($stream);
-                array_push($streams, $streamObject);
+            $found_streams = $json[self::$providers[$service]::STREAM_KEY];
+            foreach ($found_streams as $stream) {
+                $streams[] = new self::$providers[$service]($stream);
             }
         }
         return $streams;
@@ -60,14 +60,13 @@ abstract class StreamDriver {
         $limit = is_null($limit) ? is_null(self::$limit) ? self::NUM_PER_MULTI : self::$limit : $limit;
         $streams = array();
 
-        $game = urlencode($game);
         $stream_key = self::$providers[$service]::STREAM_KEY;
-
-        $json = json_decode(\Requests::get(self::$providers[$service]::GAMES_API."{$game}&limit={$limit}")->body, TRUE);
+        $apiURL =self::$providers[$service]::GAMES_API;
+        $game = urlencode($game);
+        $json = json_decode(\Requests::get("{$apiURL}{$game}&limit={$limit}")->body, TRUE);
         if (!empty($json[$stream_key])) {
             foreach ($json[$stream_key] as $stream) {
-                $streamObject = new self::$providers[$service]($stream);
-                array_push($streams, $streamObject);
+                $streams[] = new self::$providers[$service]($stream);
             }
         }
         return $streams;

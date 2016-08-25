@@ -9,8 +9,6 @@
 namespace Vinlock\StreamAPI\Services;
 
 
-use Vinlock\StreamAPI\StreamDriver;
-
 class Hitbox extends Service {
 
     protected static $service = "hitbox";

@@ -161,7 +161,10 @@ abstract class Stream {
     public static function FilterBio($bio) {
         // Filter the Bio of all bad characters.
         $bio = preg_replace("/\r|\n/", "", html_entity_decode(
-            htmlspecialchars($bio), ENT_QUOTES));
+            htmlspecialchars(
+                $bio
+            ), ENT_QUOTES)
+        );
         return $bio;
     }
 

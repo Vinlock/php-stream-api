@@ -11,7 +11,6 @@ namespace Vinlock\StreamAPI\Services;
 
 use Vinlock\StreamAPI\Exceptions\APIError;
 use Vinlock\StreamAPI\StreamDriver;
-use Vinlock\StreamAPI\StreamObjects\Stream;
 
 /**
  * Class Service
@@ -37,7 +36,7 @@ class Service {
      * Service constructor.
      */
     public function __construct() {
-        $streams = is_array(func_get_args()[0]) ? func_get_args()[0] : func_get_args();
+        $streams = self::convertArgs(func_get_args());
         foreach ($streams as $stream) {
             if ($stream instanceof Service) {
                 $this->streams = $stream->get();
@@ -116,7 +115,7 @@ class Service {
 
         /** @var \Vinlock\StreamAPI\StreamObjects\Stream $stream */
         foreach ($this->streams as $stream) {
-            array_push($streams, $stream->get());
+            $streams[] = $stream->get();
         }
 
         return $streams;
@@ -165,7 +164,7 @@ class Service {
      */
     public function merge() {
         // Allow for unlimited arguments or an array.
-        $args = is_array(func_get_args()[0]) ? func_get_args()[0] : func_get_args();
+        $args = self::convertArgs(func_get_args());
         foreach ($args as $arg) {
             // Commit the merge
             $this->streams = array_merge($this->streams, $arg->get());
@@ -182,7 +181,7 @@ class Service {
      */
     public static function game() {
         // Allow for unlimited arguments or an array.
-        $games = is_array(func_get_args()[0]) ? func_get_args()[0] : func_get_args();
+        $games = self::convertArgs(func_get_args());
         $gameObjects = [];
         foreach ($games as $game) {
             // Build an array of the stream objects.
@@ -198,11 +197,12 @@ class Service {
     /**
      * Removes duplicate streams.
      *
+     * @param bool $sort
      * @return $this
      */
-    public function removeDuplicates() {
+    public function removeDuplicates($sort = TRUE) {
         $this->streams = array_unique($this->streams, SORT_STRING);
-        $this->sort();
+        if ($sort) $this->sort();
         return $this;
     }
 
@@ -219,17 +219,21 @@ class Service {
         $this->streams = array_slice($this->streams, 0, $num);
     }
 
+    private static function convertArgs($args) {
+        return is_array($args[0]) ? $args[0] : $args;
+    }
+
     /**
      * Prepend Service object to this object.
      *
      * @param Service $service
      */
     public function prepend(Service $service) {
-        $this->streams = array_push($service->get(), $this->streams);
+        array_merge($service->get(), $this->streams);
     }
 
     public function attach(Service $service) {
-        $this->streams = array_push($this->streams, $service->get());
+        array_merge($this->streams, $service->get());
     }
 
 }

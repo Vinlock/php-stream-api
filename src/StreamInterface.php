@@ -95,10 +95,25 @@ interface StreamInterface {
      */
     function bio();
 
+    /**
+     * Account Created at
+     *
+     * @return mixed
+     */
     function created_at();
 
+    /**
+     * Information last updated
+     *
+     * @return mixed
+     */
     function updated_at();
 
+    /**
+     * Stream Followers
+     *
+     * @return mixed
+     */
     function followers();
 
 }
