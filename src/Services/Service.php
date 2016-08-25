@@ -134,7 +134,7 @@ class Service {
 
     /**
      * Sort all streams by default viewers.
-     * May set $byKey to whcih key to sort by.
+     * May set $byKey to which key to sort by.
      * Highest to Lowest or set direction.
      *
      * @param null $sort
@@ -143,19 +143,20 @@ class Service {
      */
     public function sort($sort=NULL, $byKey="viewers", $direction="desc") {
         $sort = ($sort == NULL) ? $this->streams : $sort;
-        usort($sort, function($a, $b) use ($direction) {
-            if ($direction == "desc") {
-                return $b->$byKey() <=> $a->$byKey();
-            } elseif $direction == "asc" {
-                return $a->$byKey() <=> $b->$byKey();
-            }
+        usort($sort, function($a, $b) use ($direction, $byKey) {
+            if ($direction == "desc") return $b->$byKey() <=> $a->$byKey();
+            elseif ($direction == "asc") return $a->$byKey() <=> $b->$byKey();
         });
     }
 
+    /**
+     * @param Service $merge
+     */
     public function merge(Service $merge) {
         $new_array = [];
+        $stream = $merge->get();
         /** @var Stream $merge_stream */
-        foreach ($merge->get() as $merge_stream) {
+        foreach ($stream as $merge_stream) {
             $found = FALSE;
             /** @var Stream $stream */
             foreach ($this->streams as $key => $stream) {
@@ -170,7 +171,14 @@ class Service {
                 array_push($this->streams, $merge_stream);
             }
         }
-        return $this;
+    }
+
+    public function m(Service $merge) {
+        $merge_streams = $merge->get();
+        /** @var Stream $merge_stream */
+        foreach ($merge_streams as $merge_stream) {
+
+        }
     }
 
     /**
@@ -188,6 +196,7 @@ class Service {
         foreach ($arr as $param) {
             if (is_null($first)) {
                 $first = $param;
+                continue;
             }
             $first->merge($param);
         }
@@ -202,7 +211,8 @@ class Service {
      */
     public static function game() {
         $all_streams = [];
-        foreach (func_get_args() as $param) {
+        $params = func_get_args();
+        foreach ($params as $param) {
             if (is_array($param)) {
                 foreach ($param as $game) {
                     $all_streams = array_merge($all_streams, StreamDriver::byGame($game, static::$service));
@@ -216,35 +226,15 @@ class Service {
         return $streams;
     }
 
+    /**
+     * Removes duplicate streams.
+     *
+     * @return $this
+     */
     public function removeDuplicates() {
-        $marker = substr(str_shuffle(MD5(microtime())), 0, 10);
-        $new_array = [];
-        /** @var Stream $stream */
-        foreach ($this->streams as $stream) {
-            /** @var Stream $check */
-            foreach ($this->stream as $check) {
-                $found = FALSE;
-                if ($stream->username === $check->username && $stream->service === $check->service) {
-                    if ($found) {
-                        $check->$marker = TRUE;
-                        continue;
-                    }
-                    if (!isset($check->$marker)) {
-                        if ($stream->hasCustomKeys()) {
-                            array_push($new_array, $stream);
-                        } else {
-                            array_push($new_array, $check);
-                        }
-                        $stream->$marker = TRUE;
-                        $check->$marker = TRUE;
-                        $found = TRUE;
-                    } else {
-                        break;
-                    }
-                }
-            }
-        }
-        $this->streams = $new_array;
+        $this->streams = array_unique($this->streams, SORT_STRING);
+        $this->sort();
+        return $this;
     }
 
     /**

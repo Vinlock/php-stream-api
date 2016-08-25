@@ -9,16 +9,13 @@ require_once ("../vendor/autoload.php");
 \Vinlock\StreamAPI\StreamDriver::setLimit(10);
 
 $bladeandsoul_twitch = \Vinlock\StreamAPI\Services\Twitch::game("Blade and Soul");
-$bladeandsoul_hitbox = \Vinlock\StreamAPI\Services\Hitbox::game("Blade and Soul");
 $overwatch_twitch = \Vinlock\StreamAPI\Services\Twitch::game("Overwatch");
-$overwatch_hitbox = \Vinlock\StreamAPI\Services\Hitbox::game("Overwatch");
 
-$merge = \Vinlock\StreamAPI\Services\Service::merge(
+$merge = \Vinlock\StreamAPI\Services\Service::mergeMulti(
     $bladeandsoul_twitch,
-    $bladeandsoul_hitbox,
-    $overwatch_twitch,
-    $overwatch_hitbox
+    $overwatch_twitch
 );
-//var_dump($merge);
+var_dump($merge);
+die();
 header('Content-Type: application/json');
 echo $merge->getJSON();
