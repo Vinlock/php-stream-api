@@ -136,14 +136,26 @@ class TwitchObject extends Stream implements StreamInterface {
         return self::FilterBio($json['bio']);
     }
 
+    /**
+     * Account Created at
+     * @return \DateTime
+     */
     public function created_at() {
         return new \DateTime($this->stream['created_at']);
     }
 
+    /**
+     * Information last updated
+     * @return \DateTime
+     */
     public function updated_at() {
         return new \DateTime($this->stream['channel']['updated_at']);
     }
 
+    /**
+     * 
+     * @return mixed
+     */
     public function followers() {
         return $this->stream['channel']['followers'];
     }

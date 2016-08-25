@@ -47,24 +47,6 @@ class Service {
     }
 
     /**
-     * Universal Constructor for Child Stream Services
-     *
-     * @param $array
-     * @return array
-     */
-    protected function service_construct($array) {
-        $usernames = [];
-        foreach ($array as $param) {
-            if (is_array($param)) {
-                $usernames = $param;
-            } elseif (is_string($param)) {
-                array_push($usernames, $param);
-            }
-        }
-        return StreamDriver::getStreams($usernames, static::$service);
-    }
-
-    /**
      * Find a stream where key = value.
      * Defaults key to username.
      *

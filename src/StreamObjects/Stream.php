@@ -24,6 +24,11 @@ abstract class Stream {
      */
     protected $stream;
 
+    /**
+     * The stream service string name.
+     *
+     * @var string
+     */
     protected $service;
 
     /**
@@ -42,8 +47,19 @@ abstract class Stream {
         'username', 'display_name', 'preview', 'status', 'url', 'viewers', 'id', 'avatar'
     ];
 
+    /**
+     * Dynaically added fields.
+     *
+     * @var array
+     */
     protected $customMembers = [];
 
+    /**
+     * Stream content.
+     *
+     * @param string $date_format
+     * @return array
+     */
     protected function stream($date_format = 'm-d-Y H:i:s') {
         $result = [
             "username" => $this->username(),
@@ -69,7 +85,7 @@ abstract class Stream {
     }
 
     public function hasCustomKeys() {
-        return !empty($this->customMembers);
+        return !empty( $this->customMembers );
     }
 
     /**
@@ -94,6 +110,8 @@ abstract class Stream {
     }
 
     /**
+     * Set new variables
+     *
      * @param string $name
      * @param mixed $value
      * @throws ProtectedValue
@@ -107,12 +125,15 @@ abstract class Stream {
     }
 
     /**
+     * Get variables about the stream
+     *
      * @param string $name
      * @return mixed
      */
     public final function __get(string $name) {
-        if (array_key_exists($name, $this->stream())) {
-            return $this->stream()[$name];
+        $stream = $this->stream();
+        if (array_key_exists($name, $stream)) {
+            return $stream[$name];
         } elseif (array_key_exists($name, $this->customMembers)) {
             return $this->customMembers[$name];
         } else {
@@ -120,6 +141,11 @@ abstract class Stream {
         }
     }
 
+    /**
+     * Get the single stream as an array.
+     *
+     * @return array
+     */
     public function get() {
         $info = $this->stream();
         $custom_info = $this->customMembers;
@@ -127,17 +153,24 @@ abstract class Stream {
         return $final;
     }
 
-    public function getJSON() {
-        return json_encode($this->get());
+    /**
+     * Get the single stream as JSON string.
+     *
+     * @param bool $pretty
+     * @return string
+     */
+    public function getJSON($pretty = FALSE) {
+        return json_encode($this->get(), ($pretty) ? JSON_PRETTY_PRINT : NULL);
     }
 
+    /**
+     * Get the single stream as an object.
+     *
+     * @return object
+     */
     public function getObject() {
         return (object) $this->get();
     }
-
-//    public function delete() {
-//        unset($this);
-//    }
 
     /**
      * Stream Preview

@@ -139,16 +139,25 @@ class HitboxObject extends Stream implements StreamInterface {
         return "";
     }
 
+    /**
+     * @return \DateTime
+     */
     public function created_at() {
         return new \DateTime($this->stream['media_date_added']);
     }
 
+    /**
+     * @return \DateTime
+     */
     public function updated_at() {
         return new \DateTime($this->stream['media_live_since']);
     }
 
+    /**
+     * @return int
+     */
     public function followers() {
-        return $this->stream['channel']['followers'];
+        return (int) $this->stream['channel']['followers'];
     }
 
 
