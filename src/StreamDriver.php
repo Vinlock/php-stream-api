@@ -9,8 +9,8 @@
 namespace Vinlock\StreamAPI;
 
 
-use Vinlock\StreamAPI\StreamObjects\Hitbox;
-use Vinlock\StreamAPI\StreamObjects\Twitch;
+use Vinlock\StreamAPI\StreamObjects\HitboxObject;
+use Vinlock\StreamAPI\StreamObjects\TwitchObject;
 
 abstract class StreamDriver {
 
@@ -29,8 +29,8 @@ abstract class StreamDriver {
      * @var array
      */
     public static $providers = [
-        "twitch" => Twitch::class,
-        "hitbox" => Hitbox::class
+        "twitch" => TwitchObject::class,
+        "hitbox" => HitboxObject::class
     ];
 
     /**

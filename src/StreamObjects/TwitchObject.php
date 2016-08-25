@@ -2,7 +2,7 @@
 /**
  * Website: vinlock-twitch-api
  * Created By: Vinlock
- * Date: 5/29/16 7:16 PM
+ * Date: 5/29/16 5:29 PM
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
@@ -11,19 +11,21 @@ namespace Vinlock\StreamAPI\StreamObjects;
 
 use Vinlock\StreamAPI\StreamInterface;
 
-class Hitbox extends Stream implements StreamInterface {
+class TwitchObject extends Stream implements StreamInterface {
 
-    protected $service = 'hitbox';
+    public $service = 'twitch';
 
-    const STREAM_KEY = 'livestream';
+    const STREAM_KEY = 'streams';
 
-    const STREAM_API = 'https://www.hitbox.tv/api/media/live/';
+    const STREAM_API = 'https://api.twitch.tv/kraken/streams?channel=';
 
-    const GAMES_API = 'https://api.hitbox.tv/media/live/list?game=';
+    const GAMES_API = 'https://api.twitch.tv/kraken/streams?game=';
 
-    const STREAM_IMG = 'http://edge.sf.hitbox.tv';
+    const USERS_API = 'https://api.twitch.tv/kraken/users/';
 
-    const STREAM_URL = 'http://www.hitbox.tv/';
+    const STREAM_URL = 'http://www.twitch.tv/';
+
+    const DEFAULT_AVATAR = 'http://static-cdn.jtvnw.net/jtv_user_pictures/xarth/404_user_150x150.png';
 
     public function __construct($array) {
         $this->stream = $array;
@@ -35,7 +37,7 @@ class Hitbox extends Stream implements StreamInterface {
      * @return string
      */
     public function username() {
-        return $this->stream['media_user_name'];
+        return $this->stream['channel']['name'];
     }
 
     /**
@@ -44,7 +46,7 @@ class Hitbox extends Stream implements StreamInterface {
      * @return string
      */
     public function display_name() {
-        return $this->stream['media_user_name'];
+        return $this->stream['channel']['display_name'];
     }
 
     /**
@@ -53,7 +55,7 @@ class Hitbox extends Stream implements StreamInterface {
      * @return string
      */
     public function game() {
-        return $this->stream['category_name'];
+        return $this->stream['game'];
     }
 
     /**
@@ -62,7 +64,7 @@ class Hitbox extends Stream implements StreamInterface {
      * @return string
      */
     public function largePreview() {
-        return self::STREAM_IMG.stripslashes($this->stream['media_thumbnail_large']);
+        return $this->stream['preview']['large'];
     }
 
     /**
@@ -71,7 +73,7 @@ class Hitbox extends Stream implements StreamInterface {
      * @return string
      */
     public function mediumPreview() {
-        return self::STREAM_IMG.stripslashes($this->stream['media_thumbnail_large']);
+        return $this->stream['preview']['medium'];
     }
 
     /**
@@ -80,7 +82,7 @@ class Hitbox extends Stream implements StreamInterface {
      * @return string
      */
     public function smallPreview() {
-        return self::STREAM_IMG.stripslashes($this->stream['media_thumbnail']);
+        return $this->stream['preview']['small'];
     }
 
     /**
@@ -89,11 +91,7 @@ class Hitbox extends Stream implements StreamInterface {
      * @return string
      */
     public function status() {
-        $status = $this->stream['media_status'];
-        $status = htmlspecialchars($status);
-        $status = html_entity_decode($status, ENT_QUOTES);
-        $status = preg_replace("/\r|\n/", "", $status);
-        return $status;
+        return $this->stream['channel']['status'];
     }
 
     /**
@@ -102,7 +100,7 @@ class Hitbox extends Stream implements StreamInterface {
      * @return string
      */
     public function url() {
-        return stripslashes($this->stream['channel']['channel_link']);
+        return $this->stream['channel']['url'];
     }
 
     /**
@@ -111,7 +109,7 @@ class Hitbox extends Stream implements StreamInterface {
      * @return integer
      */
     public function viewers() {
-        return $this->stream['media_views'];
+        return $this->stream['viewers'];
     }
 
     /**
@@ -120,7 +118,7 @@ class Hitbox extends Stream implements StreamInterface {
      * @return string
      */
     public function id() {
-        return $this->stream['media_id'];
+        return $this->stream['channel']['_id'];
     }
 
     /**
@@ -129,19 +127,21 @@ class Hitbox extends Stream implements StreamInterface {
      * @return string
      */
     public function avatar() {
-        return self::STREAM_IMG.stripcslashes($this->stream['channel']['user_logo']);
+        $avatar = $this->stream['channel']['logo'];
+        return (is_null($avatar)) ? self::DEFAULT_AVATAR : $avatar;
     }
 
     public function bio() {
-        return "";
+        $json = json_decode(\Requests::get(self::USERS_API.$this->username())->body, TRUE);
+        return self::FilterBio($json['bio']);
     }
 
     public function created_at() {
-        return new \DateTime($this->stream['media_date_added']);
+        return new \DateTime($this->stream['created_at']);
     }
 
     public function updated_at() {
-        return new \DateTime($this->stream['media_live_since']);
+        return new \DateTime($this->stream['channel']['updated_at']);
     }
 
     public function followers() {
