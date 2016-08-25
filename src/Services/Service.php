@@ -66,11 +66,11 @@ class Service {
      * @param string $key
      * @return mixed
      */
-    public function where($value, $key='username') {
+    public function &where($value, $key='username') {
         foreach ($this->streams as &$arr) {
             if ($arr->$key == $value) {
-                $item =& $arr;
-                return $item;
+//                $item =& $arr;
+                return $arr;
             }
         }
     }
@@ -149,36 +149,22 @@ class Service {
         });
     }
 
-    /**
-     * @param Service $merge
-     */
-    public function merge(Service $merge) {
-        $new_array = [];
-        $stream = $merge->get();
-        /** @var Stream $merge_stream */
-        foreach ($stream as $merge_stream) {
-            $found = FALSE;
-            /** @var Stream $stream */
-            foreach ($this->streams as $key => $stream) {
-                if ($stream->username === $merge_stream->username && $stream->service === $merge_stream->service) {
-                    if ($merge_stream->hasCustomKeys()) {
-                        $this->streams[$key] = $merge_stream;
-                    }
-                    $found = TRUE;
-                }
-            }
-            if (!$found) {
-                array_push($this->streams, $merge_stream);
-            }
-        }
+    private function mergeService(Service $merge) {
+        $this->streams = array_merge($this->streams, $merge->get());
+        $this->removeDuplicates();
+        return $this;
     }
 
-    public function m(Service $merge) {
-        $merge_streams = $merge->get();
-        /** @var Stream $merge_stream */
-        foreach ($merge_streams as $merge_stream) {
-
+    /**
+     * @param Service $merge
+     * @return $this
+     */
+    public function merge() {
+        $args = is_array(func_get_args()[0]) ? func_get_args()[0] : func_get_args();
+        foreach ($args as $arg) {
+            $this->mergeService($arg);
         }
+        return $this;
     }
 
     /**
