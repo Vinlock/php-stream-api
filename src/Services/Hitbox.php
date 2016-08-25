@@ -15,9 +15,4 @@ class Hitbox extends Service {
 
     protected static $service = "hitbox";
 
-    function __construct() {
-        $streams = $this->service_construct(func_get_args());
-        parent::__construct($streams);
-    }
-
 }

@@ -17,9 +17,4 @@ class Twitch extends Service {
 
     protected static $service = "twitch";
 
-    function __construct() {
-        $streams = $this->service_construct(func_get_args());
-        parent::__construct($streams);
-    }
-
 }

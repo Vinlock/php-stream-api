@@ -114,7 +114,7 @@ class HitboxObject extends Stream implements StreamInterface {
      * @return integer
      */
     public function viewers() {
-        return $this->stream['media_views'];
+        return (int) $this->stream['media_views'];
     }
 
     /**

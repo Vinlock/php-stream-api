@@ -9,6 +9,7 @@
 namespace Vinlock\StreamAPI\Services;
 
 
+use Vinlock\StreamAPI\Exceptions\APIError;
 use Vinlock\StreamAPI\StreamDriver;
 use Vinlock\StreamAPI\StreamObjects\Stream;
 
@@ -34,10 +35,16 @@ class Service {
 
     /**
      * Service constructor.
-     * @param array $streams
      */
-    public function __construct(array $streams) {
-        $this->streams = $streams;
+    public function __construct() {
+        $streams = is_array(func_get_args()[0]) ? func_get_args()[0] : func_get_args();
+        foreach ($streams as $stream) {
+            if ($stream instanceof Service) {
+                $this->streams = $stream->get();
+            } elseif (is_array($streams)) {
+                $this->streams = StreamDriver::getStreams($streams, static::$service);
+            }
+        }
     }
 
     /**
@@ -65,14 +72,16 @@ class Service {
      * @param $value
      * @param string $key
      * @return mixed
+     * @throws APIError
      */
-    public function &where($value, $key='username') {
+    public function where($value, $key='username') {
         foreach ($this->streams as &$arr) {
             if ($arr->$key == $value) {
-//                $item =& $arr;
-                return $arr;
+                $item =& $arr;
+                return $item;
             }
         }
+        return new \stdClass();
     }
 
     /**
@@ -149,45 +158,21 @@ class Service {
         });
     }
 
-    private function mergeService(Service $merge) {
-        $this->streams = array_merge($this->streams, $merge->get());
-        $this->removeDuplicates();
-        return $this;
-    }
-
     /**
-     * @param Service $merge
+     * Merge one or more services publicly.
+     *
      * @return $this
      */
     public function merge() {
+        // Allow for unlimited arguments or an array.
         $args = is_array(func_get_args()[0]) ? func_get_args()[0] : func_get_args();
         foreach ($args as $arg) {
-            $this->mergeService($arg);
+            // Commit the merge
+            $this->streams = array_merge($this->streams, $arg->get());
+            // Remove any duplicates.
+            $this->removeDuplicates();
         }
         return $this;
-    }
-
-    /**
-     * Merge two Service Objects together.
-     *
-     * @param null $arr
-     * @return Service
-     */
-    public static function mergeMulti($arr = NULL) {
-        if (!is_array($arr)) {
-            $arr = func_get_args();
-        }
-        $first = NULL;
-        /** @var Service $param */
-        foreach ($arr as $param) {
-            if (is_null($first)) {
-                $first = $param;
-                continue;
-            }
-            $first->merge($param);
-        }
-        $first->sort();
-        return $first;
     }
 
     /**
@@ -196,18 +181,16 @@ class Service {
      * @return Service
      */
     public static function game() {
-        $all_streams = [];
-        $params = func_get_args();
-        foreach ($params as $param) {
-            if (is_array($param)) {
-                foreach ($param as $game) {
-                    $all_streams = array_merge($all_streams, StreamDriver::byGame($game, static::$service));
-                }
-            } elseif (is_string($param)) {
-                $all_streams = array_merge($all_streams, StreamDriver::byGame($param, static::$service));
-            }
+        // Allow for unlimited arguments or an array.
+        $games = is_array(func_get_args()[0]) ? func_get_args()[0] : func_get_args();
+        $gameObjects = [];
+        foreach ($games as $game) {
+            // Build an array of the stream objects.
+            $gameObjects = array_merge($gameObjects, StreamDriver::byGame($game, static::$service));
         }
-        $streams = new Service($all_streams);
+        // Store the streams in a new Service.
+        $streams = new Service($gameObjects);
+        // Sort by viewers.
         $streams->sort();
         return $streams;
     }
