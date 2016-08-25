@@ -89,10 +89,13 @@ class HitboxObject extends Stream implements StreamInterface {
      * @return string
      */
     public function status() {
-        $status = $this->stream['media_status'];
-        $status = htmlspecialchars($status);
-        $status = html_entity_decode($status, ENT_QUOTES);
-        $status = preg_replace("/\r|\n/", "", $status);
+        $status = preg_replace("/\r|\n/", "",
+            html_entity_decode(
+                htmlspecialchars(
+                    $this->stream['media_status']
+                ), ENT_QUOTES
+            )
+        );
         return $status;
     }
 
