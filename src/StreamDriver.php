@@ -40,7 +40,7 @@ abstract class StreamDriver {
      * @param string $service
      * @return array
      */
-    final public static function getStreams(array $stream_usernames, string $service) {
+    public static function getStreams(array $stream_usernames, string $service) {
         $streams = array();
 
         $chunks = array_chunk($stream_usernames, self::NUM_PER_MULTI);
@@ -56,7 +56,7 @@ abstract class StreamDriver {
         return $streams;
     }
 
-    final public static function byGame(string $game, string $service, $limit = NULL) {
+    public static function byGame(string $game, string $service, $limit = NULL) {
         $limit = is_null($limit) ? is_null(self::$limit) ? self::NUM_PER_MULTI : self::$limit : $limit;
         $streams = array();
 
@@ -72,7 +72,7 @@ abstract class StreamDriver {
         return $streams;
     }
 
-    final public static function setLimit(int $limit) {
+    public static function setLimit(int $limit) {
         self::$limit = $limit;
     }
 
