@@ -1,5 +1,7 @@
 PHP API Wrapper for multiple streaming services.
 
+**Note:** Update coming, as Twitch has updated their API making this currently obsolete.
+
 #### Supported Service Providers
 * [Twitch.tv](http://www.twitch.tv)
 * [Hitbox.tv](http://www.hitbox.tv)
