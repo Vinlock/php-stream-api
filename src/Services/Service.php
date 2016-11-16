@@ -17,6 +17,8 @@ use Vinlock\StreamAPI\StreamDriver;
  * @package Vinlock\StreamAPI\Services
  */
 class Service {
+    
+    const DEFAULT_CUT = 10;
 
     /**
      *
@@ -194,7 +196,7 @@ class Service {
      * @param int $num 10
      * @param bool $remove_duplicates
      */
-    public function cut(int $num=10, $remove_duplicates = FALSE) {
+    public function cut(int $num=self::DEFAULT_CUT, $remove_duplicates = FALSE) {
         if ($remove_duplicates) {
             $this->removeDuplicates();
         }
