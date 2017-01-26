@@ -19,15 +19,15 @@ $webgate->getUserAccount();
 ```
 #### Sample Response
 Response Type: `Object`
-```json
-{
-  "user_id": "FCB9F684-7758-49E6-910E-F69FF6731DDB", # NPID
+```php
+[
+  "user_id": "FCB9F684-7758-49E6-910E-F69FF6731DDB", // NPID
   "user_center": "3",
   "user_name": "Vinlock",
   "portal_name": "Vinlock",
   "user_status": "1",
-  "login_name": "dwashbrook@ncsoft.com" # E-Mail Used to Login
-}
+  "login_name": "dwashbrook@ncsoft.com" // E-Mail Used to Login
+]
 ```
 `user_id` - NP ID   
 `login_name` -
@@ -45,8 +45,8 @@ Response Type: `Object`
 [
   "0": {
     "alias": "_200026035",
-    "created": "2016-11-16 20:00:24.000 +09:00", # Account Creation Date/Time
-    "game_account_id": "200026035" # Corresponding Game Account ID
+    "created": "2016-11-16 20:00:24.000 +09:00", // Account Creation Date/Time
+    "game_account_id": "200026035" // Corresponding Game Account ID
   }
 ]
 ```
